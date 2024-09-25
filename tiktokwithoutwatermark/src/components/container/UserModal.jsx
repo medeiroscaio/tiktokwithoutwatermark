@@ -40,6 +40,23 @@ function UserModal() {
     }
   };
 
+  const downloadVideo = async (downloadLink) => {
+    try {
+      const response = await axios.get(downloadLink, {
+        responseType: "blob",
+      });
+      const blob = new Blob([response.data], { type: "video/mp4" });
+      const link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob);
+      link.setAttribute("download", "tiktok_video.mp4");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Error downloading video", error);
+    }
+  };
+
   return (
     <div className="container">
       <div className="modal">
@@ -57,10 +74,8 @@ function UserModal() {
           Download your video without watermark
         </button>
         {downloadLink && (
-          <button>
-            <a href={downloadLink} target="_blank" rel="noopener noreferrer">
-              Click here to download
-            </a>
+          <button onClick={() => downloadVideo(downloadLink)}>
+            Click here to download
           </button>
         )}
       </div>
