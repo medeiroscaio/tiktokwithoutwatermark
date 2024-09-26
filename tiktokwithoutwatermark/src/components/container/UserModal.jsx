@@ -2,6 +2,8 @@ import { useState } from "react";
 import "./UserModal.css";
 import axios from "axios";
 import { Oval } from "react-loader-spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function UserModal() {
   const [url, setUrl] = useState("");
@@ -9,9 +11,24 @@ function UserModal() {
   const [downloadLink, setDownloadLink] = useState(null);
   const [error, setError] = useState(null);
 
+  const notifyError = (message) => toast.error(message);
+
+  const isValidTikTokUrl = (url) => {
+    const tiktokUrlPattern =
+      /^(https?:\/\/)?(www\.)?(tiktok\.com\/)(@[A-Za-z0-9._-]+\/video\/\d+)(\?.*)?$/;
+    return tiktokUrlPattern.test(url);
+  };
+
   const handleLink = async () => {
     if (!url) {
-      alert("TikTok invalid link");
+      notifyError("Please enter a TikTok video URL.");
+      return;
+    }
+
+    if (!isValidTikTokUrl(url)) {
+      notifyError(
+        "TikTok link is invalid. Please enter a valid TikTok video URL."
+      );
       return;
     }
 
@@ -100,6 +117,7 @@ function UserModal() {
           )
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 }
