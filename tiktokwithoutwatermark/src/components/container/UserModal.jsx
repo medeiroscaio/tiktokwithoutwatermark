@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./UserModal.css";
 import axios from "axios";
+import { Oval } from "react-loader-spinner";
 
 function UserModal() {
   const [url, setUrl] = useState("");
@@ -51,6 +52,8 @@ function UserModal() {
       link.setAttribute("download", "tiktok_video.mp4");
       document.body.appendChild(link);
       link.click();
+      setDownloadLink(null);
+      setUrl("");
       document.body.removeChild(link);
     } catch (error) {
       console.error("Error downloading video", error);
@@ -73,10 +76,28 @@ function UserModal() {
         <button onClick={handleLink}>
           Download your video without watermark
         </button>
-        {downloadLink && (
-          <button onClick={() => downloadVideo(downloadLink)}>
-            Click here to download
-          </button>
+        {loading ? (
+          <Oval
+            visible={true}
+            height={40}
+            width={40}
+            color="#D3D3D3"
+            secondaryColor="#000000"
+            ariaLabel="oval-loading"
+            wrapperStyle={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+            }}
+            wrapperClass=""
+          />
+        ) : (
+          downloadLink && (
+            <button onClick={() => downloadVideo(downloadLink)}>
+              Click here to download
+            </button>
+          )
         )}
       </div>
     </div>
