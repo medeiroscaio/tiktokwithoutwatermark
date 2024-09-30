@@ -7,10 +7,18 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 function UserModal() {
-  const { url, setUrl, loading, downloadLink, fetchVideoLink } =
-    useTikTokDownloader();
+  const {
+    url,
+    setUrl,
+    loading,
+    downloadLinkHd,
+    downloadLink,
+    fetchVideoLink,
+    setDownloadLinkHd,
+    setDownloadLink,
+  } = useTikTokDownloader();
 
-  const downloadVideo = async (downloadLink) => {
+  const downloadVideo = async (downloadLink, quality) => {
     try {
       const response = await axios.get(downloadLink, {
         responseType: "blob",
@@ -18,13 +26,13 @@ function UserModal() {
       const blob = new Blob([response.data], { type: "video/mp4" });
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.setAttribute("download", "tiktok_video.mp4");
+      link.setAttribute("download", `tiktok_video_${quality}.mp4`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       setUrl("");
     } catch (error) {
-      console.error("Error downloading video", error);
+      console.error(`Error downloading ${quality} video`, error);
     }
   };
 
@@ -46,11 +54,18 @@ function UserModal() {
         {loading ? (
           <LoaderSpinner />
         ) : (
-          downloadLink && (
-            <button onClick={() => downloadVideo(downloadLink)}>
-              Click here to download
-            </button>
-          )
+          <>
+            {downloadLinkHd && (
+              <button onClick={() => downloadVideo(downloadLinkHd, "HD")}>
+                Click here to download HD
+              </button>
+            )}
+            {downloadLink && (
+              <button onClick={() => downloadVideo(downloadLink, "SD")}>
+                Click here to download SD
+              </button>
+            )}
+          </>
         )}
       </div>
       <ToastContainer />

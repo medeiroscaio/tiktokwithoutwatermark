@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 export const useTikTokDownloader = () => {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
+  const [downloadLinkHd, setDownloadLinkHd] = useState(null);
   const [downloadLink, setDownloadLink] = useState(null);
   const [error, setError] = useState(null);
 
@@ -47,7 +48,8 @@ export const useTikTokDownloader = () => {
 
     try {
       const response = await axios.request(options);
-      setDownloadLink(response.data.data.hdplay);
+      setDownloadLinkHd(response.data.data.hdplay);
+      setDownloadLink(response.data.data.play);
     } catch (error) {
       notifyError("Failed to fetch the video. Try again later.");
       setError(error);
@@ -56,5 +58,13 @@ export const useTikTokDownloader = () => {
     }
   };
 
-  return { url, setUrl, loading, downloadLink, fetchVideoLink, error };
+  return {
+    url,
+    setUrl,
+    loading,
+    downloadLinkHd,
+    downloadLink,
+    fetchVideoLink,
+    error,
+  };
 };
