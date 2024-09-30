@@ -47,7 +47,7 @@ export const useTikTokDownloader = () => {
 
     try {
       const response = await axios.request(options);
-      setDownloadLink(response.data.data.play);
+      setDownloadLink(response.data.data.hdplay);
     } catch (error) {
       notifyError("Failed to fetch the video. Try again later.");
       setError(error);
