@@ -7,6 +7,7 @@ export const useTikTokDownloader = () => {
   const [loading, setLoading] = useState(false);
   const [downloadLinkHd, setDownloadLinkHd] = useState(null);
   const [downloadLink, setDownloadLink] = useState(null);
+  const [downloadLinkMp3, setDownloadLinkMp3] = useState(null);
   const [error, setError] = useState(null);
 
   const notifyError = (message) => toast.error(message);
@@ -50,6 +51,7 @@ export const useTikTokDownloader = () => {
       const response = await axios.request(options);
       setDownloadLinkHd(response.data.data.hdplay);
       setDownloadLink(response.data.data.play);
+      setDownloadLinkMp3(response.data.data.music);
     } catch (error) {
       notifyError("Failed to fetch the video. Try again later.");
       setError(error);
@@ -66,5 +68,9 @@ export const useTikTokDownloader = () => {
     downloadLink,
     fetchVideoLink,
     error,
+    downloadLinkMp3,
+    setDownloadLink,
+    setDownloadLinkHd,
+    setDownloadLinkMp3,
   };
 };

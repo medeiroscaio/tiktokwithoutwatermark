@@ -16,6 +16,8 @@ function UserModal() {
     fetchVideoLink,
     setDownloadLinkHd,
     setDownloadLink,
+    setDownloadLinkMp3,
+    downloadLinkMp3,
   } = useTikTokDownloader();
 
   const downloadVideo = async (downloadLink, quality) => {
@@ -23,16 +25,27 @@ function UserModal() {
       const response = await axios.get(downloadLink, {
         responseType: "blob",
       });
-      const blob = new Blob([response.data], { type: "video/mp4" });
+
+      const blob = new Blob([response.data], {
+        type: quality === "audio" ? "audio/mp3" : "video/mp4",
+      });
+
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.setAttribute("download", `tiktok_video_${quality}.mp4`);
+      const fileExtension = quality === "audio" ? "mp3" : "mp4";
+      link.setAttribute(
+        "download",
+        `tiktok_${
+          quality === "audio" ? "audio" : "video"
+        }_${quality}.${fileExtension}`
+      );
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       setUrl("");
+      setDownloadLinkHd(null), setDownloadLink(null), setDownloadLinkMp3(null);
     } catch (error) {
-      console.error(`Error downloading ${quality} video`, error);
+      console.error(`Error downloading ${quality} file`, error);
     }
   };
 
@@ -63,6 +76,11 @@ function UserModal() {
             {downloadLink && (
               <button onClick={() => downloadVideo(downloadLink, "SD")}>
                 Click here to download SD
+              </button>
+            )}
+            {downloadLinkMp3 && (
+              <button onClick={() => downloadVideo(downloadLinkMp3, "audio")}>
+                Click here to download audio video
               </button>
             )}
           </>
