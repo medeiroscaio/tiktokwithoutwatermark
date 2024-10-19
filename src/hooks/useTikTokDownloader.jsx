@@ -1,14 +1,48 @@
-import { useState } from "react";
+import { useReducer } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const initialState = {
+  url: "",
+  loading: false,
+  downloadLinkHd: null,
+  downloadLink: null,
+  downloadLinkMp3: null,
+  error: null,
+  uniqueId: null,
+  downloadButton: true,
+};
+
+const downloaderReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_URL":
+      return { ...state, url: action.payload };
+    case "SET_LOADING":
+      return { ...state, loading: action.payload };
+    case "SET_DOWNLOAD_LINKS":
+      return {
+        ...state,
+        downloadLinkHd: action.payload.hd,
+        downloadLink: action.payload.sd,
+        downloadLinkMp3: action.payload.mp3,
+        uniqueId: action.payload.uniqueId,
+      };
+    case "SET_DOWNLOAD_BUTTON":
+      return {
+        ...state,
+        downloadButton: action.payload,
+      };
+    case "SET_ERROR":
+      return { ...state, error: action.payload };
+    case "RESET":
+      return initialState;
+    default:
+      return state;
+  }
+};
+
 export const useTikTokDownloader = () => {
-  const [url, setUrl] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [downloadLinkHd, setDownloadLinkHd] = useState(null);
-  const [downloadLink, setDownloadLink] = useState(null);
-  const [downloadLinkMp3, setDownloadLinkMp3] = useState(null);
-  const [error, setError] = useState(null);
+  const [state, dispatch] = useReducer(downloaderReducer, initialState);
 
   const notifyError = (message) => toast.error(message);
 
@@ -19,26 +53,25 @@ export const useTikTokDownloader = () => {
   };
 
   const fetchVideoLink = async () => {
-    if (!url) {
+    if (!state.url) {
       notifyError("Please enter a TikTok video URL.");
       return;
     }
 
-    if (!isValidTikTokUrl(url)) {
+    if (!isValidTikTokUrl(state.url)) {
       notifyError(
         "TikTok link is invalid. Please enter a valid TikTok video URL."
       );
       return;
     }
 
-    setLoading(true);
-    setError(null);
+    dispatch({ type: "SET_LOADING", payload: true });
 
     const options = {
       method: "GET",
       url: "https://tiktok-video-no-watermark2.p.rapidapi.com/",
       params: {
-        url: url,
+        url: state.url,
         hd: "1",
       },
       headers: {
@@ -49,28 +82,26 @@ export const useTikTokDownloader = () => {
 
     try {
       const response = await axios.request(options);
-      setDownloadLinkHd(response.data.data.hdplay);
-      setDownloadLink(response.data.data.play);
-      setDownloadLinkMp3(response.data.data.music);
+      dispatch({
+        type: "SET_DOWNLOAD_LINKS",
+        payload: {
+          hd: response.data.data.hdplay,
+          sd: response.data.data.play,
+          mp3: response.data.data.music,
+          uniqueId: response.data.data.author.unique_id,
+        },
+      });
     } catch (error) {
       notifyError("Failed to fetch the video. Try again later.");
-      setError(error);
+      dispatch({ type: "SET_ERROR", payload: error.message });
     } finally {
-      setLoading(false);
+      dispatch({ type: "SET_LOADING", payload: false });
     }
   };
 
   return {
-    url,
-    setUrl,
-    loading,
-    downloadLinkHd,
-    downloadLink,
+    state,
+    dispatch,
     fetchVideoLink,
-    error,
-    downloadLinkMp3,
-    setDownloadLink,
-    setDownloadLinkHd,
-    setDownloadLinkMp3,
   };
 };

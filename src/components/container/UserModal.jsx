@@ -7,18 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
 function UserModal() {
-  const {
-    url,
-    setUrl,
-    loading,
-    downloadLinkHd,
-    downloadLink,
-    fetchVideoLink,
-    setDownloadLinkHd,
-    setDownloadLink,
-    setDownloadLinkMp3,
-    downloadLinkMp3,
-  } = useTikTokDownloader();
+  const { state, dispatch, fetchVideoLink } = useTikTokDownloader();
 
   const downloadVideo = async (downloadLink, quality) => {
     try {
@@ -35,15 +24,14 @@ function UserModal() {
       const fileExtension = quality === "audio" ? "mp3" : "mp4";
       link.setAttribute(
         "download",
-        `tiktok_${
-          quality === "audio" ? "audio" : "video"
+        `tiktok_${quality === "audio" ? "audio" : "video"}_${
+          state.uniqueId
         }_${quality}.${fileExtension}`
       );
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      setUrl("");
-      setDownloadLinkHd(null), setDownloadLink(null), setDownloadLinkMp3(null);
+      dispatch({ type: "RESET" });
     } catch (error) {
       console.error(`Error downloading ${quality} file`, error);
     }
@@ -53,33 +41,43 @@ function UserModal() {
     <div className="container">
       <div className="modal">
         <p className="inter-heavy">Download your TikTok video</p>
-        <p className="inter-light">without watermark, and in high quality</p>
+        <p className="inter-light">without watermark, and high quality</p>
         <input
           type="url"
           placeholder="Insert the link"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          value={state.url}
+          onChange={(e) =>
+            dispatch({ type: "SET_URL", payload: e.target.value })
+          }
         />
-        <button onClick={fetchVideoLink}>
-          Download your video without watermark
-        </button>
-
-        {loading ? (
+        {state.downloadButton ? (
+          <button
+            onClick={() => {
+              dispatch({ type: "SET_DOWNLOAD_BUTTON", payload: false });
+              fetchVideoLink();
+            }}
+          >
+            Download your video without watermark
+          </button>
+        ) : null}
+        {state.loading ? (
           <LoaderSpinner />
         ) : (
           <>
-            {downloadLinkHd && (
-              <button onClick={() => downloadVideo(downloadLinkHd, "HD")}>
+            {state.downloadLinkHd && (
+              <button onClick={() => downloadVideo(state.downloadLinkHd, "HD")}>
                 Click here to download HD
               </button>
             )}
-            {downloadLink && (
-              <button onClick={() => downloadVideo(downloadLink, "SD")}>
+            {state.downloadLink && (
+              <button onClick={() => downloadVideo(state.downloadLink, "SD")}>
                 Click here to download SD
               </button>
             )}
-            {downloadLinkMp3 && (
-              <button onClick={() => downloadVideo(downloadLinkMp3, "audio")}>
+            {state.downloadLinkMp3 && (
+              <button
+                onClick={() => downloadVideo(state.downloadLinkMp3, "audio")}
+              >
                 Click here to download audio video
               </button>
             )}
