@@ -2,6 +2,7 @@ import { useReducer } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+// INITIAL STATE
 const initialState = {
   url: "",
   loading: false,
@@ -13,7 +14,9 @@ const initialState = {
   downloadButton: true,
 };
 
+// FUNCTION FOR HANDLE THE ACTIONS
 const downloaderReducer = (state, action) => {
+  // CURRENT STATE AND THE NEW STATE (ACTION.PAYLOAD)
   switch (action.type) {
     case "SET_URL":
       return { ...state, url: action.payload };
@@ -42,6 +45,9 @@ const downloaderReducer = (state, action) => {
 };
 
 export const useTikTokDownloader = () => {
+  // INITIALIZE USEREDUCER
+  // INITIALSTATE: STATE, DISPATCH: ACTION
+  // START TO USE "STATE.THING" TO ACCESS THE CURRENT STATE
   const [state, dispatch] = useReducer(downloaderReducer, initialState);
 
   const notifyError = (message) => toast.error(message);
@@ -53,6 +59,7 @@ export const useTikTokDownloader = () => {
   };
 
   const fetchVideoLink = async () => {
+    // ACCESS THE CURRENT URL STATE
     if (!state.url) {
       notifyError("Please enter a TikTok video URL.");
       return;
@@ -64,7 +71,8 @@ export const useTikTokDownloader = () => {
       );
       return;
     }
-
+    // USE DISPATCH TO DEFINE THE TYPE AND THE PAYLOAD TO UPDATE
+    dispatch({ type: "SET_DOWNLOAD_BUTTON", payload: false });
     dispatch({ type: "SET_LOADING", payload: true });
 
     const options = {

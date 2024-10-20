@@ -5,6 +5,7 @@ import { LoaderSpinner } from "../Loader/loaderspinner.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
+import { MdContentPaste } from "react-icons/md";
 
 function UserModal() {
   const { state, dispatch, fetchVideoLink } = useTikTokDownloader();
@@ -42,18 +43,23 @@ function UserModal() {
       <div className="modal">
         <p className="inter-heavy">Download your TikTok video</p>
         <p className="inter-light">without watermark, and high quality</p>
-        <input
-          type="url"
-          placeholder="Insert the link"
-          value={state.url}
-          onChange={(e) =>
-            dispatch({ type: "SET_URL", payload: e.target.value })
-          }
-        />
+        <div className="input-wrapper">
+          <input
+            type="url"
+            placeholder="Insert the link"
+            value={state.url}
+            onChange={(e) =>
+              dispatch({ type: "SET_URL", payload: e.target.value })
+            }
+          />
+          <button className="paste-button">
+            <MdContentPaste />
+          </button>
+        </div>
         {state.downloadButton ? (
           <button
+            className="download-button"
             onClick={() => {
-              dispatch({ type: "SET_DOWNLOAD_BUTTON", payload: false });
               fetchVideoLink();
             }}
           >
@@ -65,17 +71,24 @@ function UserModal() {
         ) : (
           <>
             {state.downloadLinkHd && (
-              <button onClick={() => downloadVideo(state.downloadLinkHd, "HD")}>
+              <button
+                className="download-button"
+                onClick={() => downloadVideo(state.downloadLinkHd, "HD")}
+              >
                 Click here to download HD
               </button>
             )}
             {state.downloadLink && (
-              <button onClick={() => downloadVideo(state.downloadLink, "SD")}>
+              <button
+                className="download-button"
+                onClick={() => downloadVideo(state.downloadLink, "SD")}
+              >
                 Click here to download SD
               </button>
             )}
             {state.downloadLinkMp3 && (
               <button
+                className="download-button"
                 onClick={() => downloadVideo(state.downloadLinkMp3, "audio")}
               >
                 Click here to download audio video
