@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { MdContentPaste } from "react-icons/md";
-import { FaPaste } from "react-icons/fa6";
+import { MdClear } from "react-icons/md";
 import { useClipboardPaste } from "../../hooks/useClipboardPaste.jsx";
 
 function UserModal() {
@@ -55,21 +55,27 @@ function UserModal() {
               dispatch({ type: "SET_URL", payload: e.target.value })
             }
           />
-          <button
-            onMouseEnter={() =>
-              dispatch({ type: "SET_HOVERED_BUTTON", payload: true })
-            }
-            onMouseLeave={() =>
-              dispatch({ type: "SET_HOVERED_BUTTON", payload: false })
-            }
-            onClick={async () => {
-              const text = await pasteFromClipboard();
-              dispatch({ type: "SET_URL", payload: text });
-            }}
-            className="paste-button"
-          >
-            <MdContentPaste />
-          </button>
+
+          {state.url ? (
+            <button
+              onClick={() => {
+                dispatch({ type: "RESET_URL" });
+              }}
+              className="action-button"
+            >
+              <MdClear />
+            </button>
+          ) : (
+            <button
+              onClick={async () => {
+                const text = await pasteFromClipboard();
+                dispatch({ type: "SET_URL", payload: text });
+              }}
+              className="action-button"
+            >
+              <MdContentPaste />
+            </button>
+          )}
         </div>
         {state.downloadButton ? (
           <button

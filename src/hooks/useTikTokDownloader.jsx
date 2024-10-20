@@ -11,7 +11,6 @@ const initialState = {
   error: null,
   uniqueId: null,
   downloadButton: true,
-  isHovered: false,
 };
 
 // FUNCTION FOR HANDLE THE ACTIONS
@@ -20,6 +19,8 @@ const downloaderReducer = (state, action) => {
   switch (action.type) {
     case "SET_URL":
       return { ...state, url: action.payload };
+    case "RESET_URL":
+      return { ...state, url: "" };
     case "SET_LOADING":
       return { ...state, loading: action.payload };
     case "SET_DOWNLOAD_LINKS":
@@ -35,8 +36,6 @@ const downloaderReducer = (state, action) => {
         ...state,
         downloadButton: action.payload,
       };
-    case "SET_HOVERED_BUTTON":
-      return { ...state, isHovered: action.payload };
     case "SET_ERROR":
       return { ...state, error: action.payload };
     case "RESET":
