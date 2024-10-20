@@ -6,9 +6,12 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { MdContentPaste } from "react-icons/md";
+import { FaPaste } from "react-icons/fa6";
+import { useClipboardPaste } from "../../hooks/useClipboardPaste.jsx";
 
 function UserModal() {
   const { state, dispatch, fetchVideoLink } = useTikTokDownloader();
+  const pasteFromClipboard = useClipboardPaste();
 
   const downloadVideo = async (downloadLink, quality) => {
     try {
@@ -52,7 +55,19 @@ function UserModal() {
               dispatch({ type: "SET_URL", payload: e.target.value })
             }
           />
-          <button className="paste-button">
+          <button
+            onMouseEnter={() =>
+              dispatch({ type: "SET_HOVERED_BUTTON", payload: true })
+            }
+            onMouseLeave={() =>
+              dispatch({ type: "SET_HOVERED_BUTTON", payload: false })
+            }
+            onClick={async () => {
+              const text = await pasteFromClipboard();
+              dispatch({ type: "SET_URL", payload: text });
+            }}
+            className="paste-button"
+          >
             <MdContentPaste />
           </button>
         </div>

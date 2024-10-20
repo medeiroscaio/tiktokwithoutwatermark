@@ -2,7 +2,6 @@ import { useReducer } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// INITIAL STATE
 const initialState = {
   url: "",
   loading: false,
@@ -12,6 +11,7 @@ const initialState = {
   error: null,
   uniqueId: null,
   downloadButton: true,
+  isHovered: false,
 };
 
 // FUNCTION FOR HANDLE THE ACTIONS
@@ -35,6 +35,8 @@ const downloaderReducer = (state, action) => {
         ...state,
         downloadButton: action.payload,
       };
+    case "SET_HOVERED_BUTTON":
+      return { ...state, isHovered: action.payload };
     case "SET_ERROR":
       return { ...state, error: action.payload };
     case "RESET":
