@@ -69,10 +69,10 @@ input::placeholder {
   transform: translateY(-50%);
   top: 50%;
   right: 0;
-  margin-right: 5px;
   font-size: 25px;
-  width: 30px;
-  height: 30px;
+  width: 39px;
+  height: 39px;
+  margin-right: 1px;
   border: none;
   background-color: #808080;
   cursor: pointer;
@@ -80,6 +80,7 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
+  border: solid black 1px;
 }
 .download-button {
   border: none;
