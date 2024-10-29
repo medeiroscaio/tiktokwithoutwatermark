@@ -80,7 +80,6 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: solid black 1px;
 }
 .download-button {
   border: none;

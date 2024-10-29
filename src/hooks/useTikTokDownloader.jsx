@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useReducer, useMemo } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
@@ -53,11 +53,13 @@ export const useTikTokDownloader = () => {
 
   const notifyError = (message) => toast.error(message);
 
-  const isValidTikTokUrl = (url) => {
-    const tiktokUrlPattern =
-      /^(https?:\/\/)?(www\.)?(tiktok\.com\/)(@[A-Za-z0-9._-]+\/video\/\d+)(\?.*)?$/;
-    return tiktokUrlPattern.test(url);
-  };
+  const tiktokUrlPattern = useMemo(
+    () =>
+      /^(https?:\/\/)?(www\.)?(tiktok\.com\/)(@[A-Za-z0-9._-]+\/video\/\d+)(\?.*)?$/,
+    []
+  );
+
+  const isValidTikTokUrl = (url) => tiktokUrlPattern.test(url);
 
   const fetchVideoLink = async () => {
     // ACCESS THE CURRENT URL STATE
