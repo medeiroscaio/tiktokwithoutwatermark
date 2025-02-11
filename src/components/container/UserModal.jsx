@@ -8,10 +8,13 @@ import axios from "axios";
 import { MdContentPaste } from "react-icons/md";
 import { MdClear } from "react-icons/md";
 import { useClipboardPaste } from "../../hooks/useClipboardPaste.jsx";
+import { useTheme } from "../../hooks/themecontext.jsx";
+import { ButtonToggle } from "../ButtonToggle/buttontoggle.jsx";
 
 function UserModal() {
   const { state, dispatch, fetchVideoLink } = useTikTokDownloader();
   const pasteFromClipboard = useClipboardPaste();
+  const { theme, toggleTheme } = useTheme();
 
   const downloadVideo = async (downloadLink, quality) => {
     try {
@@ -42,8 +45,9 @@ function UserModal() {
   };
 
   return (
-    <div className="container">
-      <div className="modal">
+    <div className={`container ${theme}`}>
+      <div className={`modal ${theme}`}>
+        <ButtonToggle />
         <p className="inter-heavy">Download your TikTok video</p>
         <p className="inter-light">without watermark, and high quality</p>
         <div className="input-wrapper">
@@ -71,7 +75,7 @@ function UserModal() {
                 const text = await pasteFromClipboard();
                 dispatch({ type: "SET_URL", payload: text });
               }}
-              className="action-button"
+              className={`action-button ${theme}`}
             >
               <MdContentPaste />
             </button>
@@ -79,7 +83,7 @@ function UserModal() {
         </div>
         {state.downloadButton ? (
           <button
-            className="download-button"
+            className={`download-button ${theme}`}
             onClick={() => {
               fetchVideoLink();
             }}
@@ -93,7 +97,7 @@ function UserModal() {
           <>
             {state.downloadLinkHd && (
               <button
-                className="download-button"
+                className={`download-button ${theme}`}
                 onClick={() => downloadVideo(state.downloadLinkHd, "HD")}
               >
                 Click here to download HD
@@ -101,7 +105,7 @@ function UserModal() {
             )}
             {state.downloadLink && (
               <button
-                className="download-button"
+                className={`download-button ${theme}`}
                 onClick={() => downloadVideo(state.downloadLink, "SD")}
               >
                 Click here to download SD
@@ -109,7 +113,7 @@ function UserModal() {
             )}
             {state.downloadLinkMp3 && (
               <button
-                className="download-button"
+                className={`download-button ${theme}`}
                 onClick={() => downloadVideo(state.downloadLinkMp3, "audio")}
               >
                 Click here to download audio video

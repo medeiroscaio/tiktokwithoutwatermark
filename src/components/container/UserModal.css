@@ -23,18 +23,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
   z-index: 999;
 }
 
 .modal {
-  background-color: #1e1e1e;
   padding: 40px;
   width: 400px;
   border-radius: 12px;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
   text-align: center;
-  color: #fff;
   display: flex;
   flex-direction: column;
   gap: 15px;
@@ -74,7 +71,6 @@ input::placeholder {
   height: 39px;
   margin-right: 1px;
   border: none;
-  background-color: #808080;
   cursor: pointer;
   border-radius: 4px;
   display: flex;
@@ -85,11 +81,51 @@ input::placeholder {
   border: none;
   width: 100%;
   height: 50px;
-  background-color: #a7a6a6;
   cursor: pointer;
   border-radius: 5px;
 }
 
-.download-button:hover {
+/* DARK THEME */
+.container.dark {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal.dark {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.action-button.dark {
+  background-color: #808080;
+}
+
+.download-button.dark {
+  background-color: #a7a6a6;
+}
+
+.download-button.dark:hover {
   background-color: #8e8d8d;
+}
+
+/* LIGHT THEME */
+
+.container.light {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.modal.light {
+  background-color: #f0f0f0;
+  color: #000000;
+}
+
+.action-button.light {
+  background-color: #cccccc;
+}
+
+.download-button.light {
+  background-color: #d0d0d0;
+}
+
+.download-button.light:hover {
+  background-color: #bfbfbf;
 }
