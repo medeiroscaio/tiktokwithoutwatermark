@@ -54,12 +54,15 @@ export const useTikTokDownloader = () => {
   const notifyError = (message) => toast.error(message);
 
   const tiktokUrlPattern = useMemo(
-    () =>
+    () => [
       /^(https?:\/\/)?(www\.)?(tiktok\.com\/)(@[A-Za-z0-9._-]+\/video\/\d+)(\?.*)?$/,
+      /^(https?:\/\/)?(vm\.tiktok\.com\/\w+\/?)(\?.*)?$/,
+    ],
     []
   );
 
-  const isValidTikTokUrl = (url) => tiktokUrlPattern.test(url);
+  const isValidTikTokUrl = (url) =>
+    tiktokUrlPattern.some((pattern) => pattern.test(url));
 
   const fetchVideoLink = async () => {
     // ACCESS THE CURRENT URL STATE

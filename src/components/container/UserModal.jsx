@@ -47,11 +47,14 @@ function UserModal() {
   return (
     <div className={`container ${theme}`}>
       <div className={`modal ${theme}`}>
-        <ButtonToggle />
+        <div className="toggle-button">
+          <ButtonToggle />
+        </div>
         <p className="inter-heavy">Download your TikTok video</p>
         <p className="inter-light">without watermark, and high quality</p>
         <div className="input-wrapper">
           <input
+            className={`${theme}`}
             type="url"
             placeholder="Insert the link"
             value={state.url}
@@ -65,7 +68,7 @@ function UserModal() {
               onClick={() => {
                 dispatch({ type: "RESET_URL" });
               }}
-              className="action-button"
+              className={`action-button ${theme}`}
             >
               <MdClear />
             </button>

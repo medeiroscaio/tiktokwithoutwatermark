@@ -15,7 +15,19 @@ export const ButtonToggle = () => {
   return (
     <div>
       <label>
-        <Switch onChange={handleToggle} checked={checked} />
+        <Switch
+          onChange={handleToggle}
+          checked={checked}
+          onColor="#a7a6a6"
+          offColor="#ddd"
+          onHandleColor="#fff"
+          offHandleColor="#495057"
+          handleDiameter={20}
+          height={20}
+          width={48}
+          uncheckedIcon={false}
+          checkedIcon={false}
+        />
       </label>
     </div>
   );
