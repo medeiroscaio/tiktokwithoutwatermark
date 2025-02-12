@@ -2,6 +2,8 @@ import { useReducer, useMemo } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 
+const apiKey = import.meta.env.VITE_API_KEY;
+
 const initialState = {
   url: "",
   loading: false,
@@ -89,7 +91,7 @@ export const useTikTokDownloader = () => {
         hd: "1",
       },
       headers: {
-        "x-rapidapi-key": "7effb6e978msh3787522182c0cf7p185c05jsn320426c6b770",
+        "x-rapidapi-key": apiKey,
         "x-rapidapi-host": "tiktok-video-no-watermark2.p.rapidapi.com",
       },
     };
@@ -106,8 +108,11 @@ export const useTikTokDownloader = () => {
         },
       });
     } catch (error) {
-      notifyError("Failed to fetch the video. Try again later.");
-      dispatch({ type: "SET_ERROR", payload: error.message });
+      if (error.response?.status === 429) {
+        notifyError("Too many requests. Try again later.");
+      } else {
+        notifyError("Failed to fetch video. Try again");
+      }
     } finally {
       dispatch({ type: "SET_LOADING", payload: false });
     }
