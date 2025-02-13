@@ -1,6 +1,6 @@
 import React from "react";
 import Switch from "react-switch";
-import { useTheme } from "../../hooks/Themecontext.jsx";
+import { useTheme } from "../../hooks/ThemeContext.jsx";
 import { useState } from "react";
 
 export const ButtonToggle = () => {
