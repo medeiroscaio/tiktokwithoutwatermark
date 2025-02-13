@@ -8,7 +8,7 @@ import axios from "axios";
 import { MdContentPaste } from "react-icons/md";
 import { MdClear } from "react-icons/md";
 import { useClipboardPaste } from "../../hooks/useClipboardPaste.jsx";
-import { useTheme } from "../../hooks/themecontext.jsx";
+import { useTheme } from "../../hooks/Themecontext.jsx";
 import { ButtonToggle } from "../ButtonToggle/buttontoggle.jsx";
 
 function UserModal() {
